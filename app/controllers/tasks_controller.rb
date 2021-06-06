@@ -1,10 +1,11 @@
 class TasksController < ApplicationController
+  before_action :set_message, only: [:show, :edit, :update, :destroy]
+  
   def index
     @tasks = Task.all
   end
 
   def show
-    @task = Task.find(params[:id])
   end
 
   def new
@@ -18,13 +19,12 @@ class TasksController < ApplicationController
       flash[:success] = 'Task が正常に投稿されました'
       redirect_to @task
     else
-      flash.now[:danger] = "Task が投稿されませんでした#{params}"
+      flash.now[:danger] = 'Task が投稿されませんでした'
       render :new
     end
   end
 
   def edit
-    @task = Task.find(params[:id])
   end
 
   def update
@@ -40,7 +40,6 @@ class TasksController < ApplicationController
   end
 
   def destroy
-    @task = Task.find(params[:id])
     @task.destroy
 
     flash[:success] = 'Task は正常に削除されました'
@@ -48,10 +47,14 @@ class TasksController < ApplicationController
   end
   
   private
+  
+  def set_message
+    @task = Task.find(params[:id])
+  end
 
   # Strong Parameter
   def task_params
-    params.require(:task).permit(:content, :status)
+    params.require(:task).permit(:content,　:status)
   end
 
 end
